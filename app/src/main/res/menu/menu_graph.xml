@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/sendGraph"
+        android:icon="@drawable/ic_send_white_24dp"
+        android:title="送信"
+        app:showAsAction="always|withText"
+        android:orderInCategory="100" />
+
+    <item
+        android:id="@+id/changeType"
+        android:icon="@drawable/ic_timeline_white_24dp"
+        android:title="変更"
+        app:showAsAction="always|withText"
+        android:orderInCategory="110">
+
+        <menu>
+            <item android:id="@+id/graphdays3"
+                android:title="３日間グラフ" />
+            <item android:id="@+id/graphdays7"
+                android:title="７日間グラフ" />
+        </menu>
+
+    </item>
+
+</menu>
+

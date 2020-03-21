@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/editPerson"
+        android:icon="@drawable/ic_create_white_24dp"
+        android:title="編集"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/addPerson"
+        android:icon="@drawable/ic_person_add_white_24dp"
+        android:title="追加"
+        app:showAsAction="always|withText" />
+
+</menu>
