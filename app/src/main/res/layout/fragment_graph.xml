@@ -60,7 +60,7 @@
 
     </LinearLayout>
 
-    <com.tatsuo.temperature.GraphView
+    <com.tatsuo.bodytemperature.GraphView
         android:id="@+id/graphView"
         android:layout_width="match_parent"
         android:layout_height="400dp" />

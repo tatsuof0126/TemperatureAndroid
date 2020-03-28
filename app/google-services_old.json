@@ -8,35 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:194555037208:android:bdbe699e8eec6e4e5a656d",
-        "android_client_info": {
-          "package_name": "com.tatsuo.bodytemperature"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "194555037208-sfa66hnj816qsf80jndkt4bj5jcuocne.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAJgOOca-KCADHXH1uDtMGCNIy1JeJ-hbk"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "194555037208-sfa66hnj816qsf80jndkt4bj5jcuocne.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:194555037208:android:f2d9b626648245a5",
         "android_client_info": {
           "package_name": "com.tatsuo.temperature"

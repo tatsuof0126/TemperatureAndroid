@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
-        android:text="広告を削除する" />
+        android:text=" 広告を削除する " />
 
     <TextView
         android:id="@+id/versionText"
