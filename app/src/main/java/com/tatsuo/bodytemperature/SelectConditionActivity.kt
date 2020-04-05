@@ -17,22 +17,11 @@ class SelectConditionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_condition)
 
-        setTitle("症状を選択")
+        setTitle(getString(R.string.title_select_condition))
         setResult(Activity.RESULT_CANCELED)
 
         val conditions = intent.getStringExtra("CONDITIONS")
         selectConditionIdList = getConditionIdList(conditions).toMutableList()
-
-        /*
-        // val selectConditionList : ArrayList<Int> = ArrayList<Int>()
-        val selConArray = conditions.split(",")
-        for(conditionIdStr in selConArray){
-            try {
-                val conditionId = conditionIdStr.toInt()
-                selectConditionList.add(conditionId)
-            } catch (nfe : NumberFormatException ){}
-        }
-        */
 
         val adapter = ConditionAdapter(selectConditionIdList)
         val conditionRecyclerView : RecyclerView = findViewById(R.id.conditionRecyclerView)

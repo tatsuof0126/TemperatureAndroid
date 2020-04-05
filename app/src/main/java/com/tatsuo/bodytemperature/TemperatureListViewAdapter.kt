@@ -12,6 +12,7 @@ import com.tatsuo.bodytemperature.db.Temperature
 import com.tatsuo.bodytemperature.dummy.DummyContent.DummyItem
 import kotlinx.android.synthetic.main.listitem_temperature.view.*
 import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
@@ -43,13 +44,27 @@ class TemperatureListViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val temperature = mValues[position]
 
-        val dateFormat = SimpleDateFormat("M'月'd'日('E')' H:mm")
+        var dateFormatString = "E, MMM d h:mm a"
+        if (Locale.getDefault().equals(Locale.JAPAN)) {
+            dateFormatString = "M'月'd'日('E')' H:mm"
+        }
+        val dateFormat = SimpleDateFormat(dateFormatString)
         holder.mDateString.text = dateFormat.format(temperature.date)
-        holder.mTemperatureString.text = String.format("%.1f", temperature.temperature)+"℃"
-        if(temperature.temperature >= 38.0){
-            holder.mTemperatureString.setTextColor(Color.RED)
+
+        if(ConfigManager.loadUseFahrenheitFlag()){
+            holder.mTemperatureString.text = String.format("%.1f", temperature.getFahrenheitTemperature()) + "°F"
+            if (temperature.getFahrenheitTemperature() >= 100.0) {
+                holder.mTemperatureString.setTextColor(Color.RED)
+            } else {
+                holder.mTemperatureString.setTextColor(Color.BLACK)
+            }
         } else {
-            holder.mTemperatureString.setTextColor(Color.BLACK)
+            holder.mTemperatureString.text = String.format("%.1f", temperature.temperature) + "℃"
+            if (temperature.temperature >= 38.0) {
+                holder.mTemperatureString.setTextColor(Color.RED)
+            } else {
+                holder.mTemperatureString.setTextColor(Color.BLACK)
+            }
         }
         holder.mConditionMemoString.text = (temperature.getConditionString() + " " + temperature.memo).trim()
 

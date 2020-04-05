@@ -31,16 +31,6 @@ class ConditionAdapter(val selectedConditionIdList : MutableList<Int> = mutableL
             } else {
                 selectedConditionIdList.remove(position)
             }
-
-            /*
-            // テストコード
-            Log.e("ConditionAdapter","position : "+position+"  isChecked : "+isChecked)
-            var tempStr = ""
-            for(idInt in selectedConditionIdList){
-                tempStr += ""+idInt+","
-            }
-            Log.e("ConditionAdapter","selectedConditionId : "+tempStr)
-            */
         }
     }
 

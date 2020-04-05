@@ -56,9 +56,9 @@ class PeopleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        database = Room.databaseBuilder(requireActivity().applicationContext, objectOf<TemperatureDatabase>(), "temperature_database.db").build()
+        database = Room.databaseBuilder(requireActivity().applicationContext, TemperatureDatabase::class.java, "temperature_database.db").build()
 
-        requireActivity().setTitle("人の切替")
+        requireActivity().setTitle(getString(R.string.title_person))
 
         updateViewAdapter()
     }
@@ -162,9 +162,9 @@ class PeopleFragment : Fragment() {
             val editPersonView = inflater.inflate(R.layout.dialog_editperson, null)
 
             builder.setView(editPersonView)
-                    .setTitle("人の追加")
-                    .setPositiveButton("OK") { dialog, id ->
-                        val personId = ConfigManager().loadTargetPersonId()
+                    .setTitle(getString(R.string.add_person))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, id ->
+                        val personId = ConfigManager.loadTargetPersonId()
                         val personName = editPersonView.nameText.text.toString().trim()
 
                         Log.e("***Temperature***", "PersonName : [" + personName + "]")
@@ -182,7 +182,7 @@ class PeopleFragment : Fragment() {
                             }
                         }
                     }
-                    .setNegativeButton("キャンセル") { dialog, id ->
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, id ->
 
                     }
 
@@ -200,9 +200,9 @@ class PeopleFragment : Fragment() {
             var deletable = false
 
             builder.setView(editPersonView)
-                    .setTitle("名前の編集")
-                    .setPositiveButton("OK") { dialog, id ->
-                        val personId = ConfigManager().loadTargetPersonId()
+                    .setTitle(getString(R.string.edit_name))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, id ->
+                        val personId = ConfigManager.loadTargetPersonId()
                         val personName = editPersonView.nameText.text.toString().trim()
                         if (personName != "") {
                             val dao = database.personDao()
@@ -212,7 +212,7 @@ class PeopleFragment : Fragment() {
                                 if (person.size >= 1) {
                                     person[0].name = personName
                                     dao.update(person[0])
-                                    ConfigManager().saveTargetPersonName(personName)
+                                    ConfigManager.saveTargetPersonName(personName)
                                 }
                             }
                             requireActivity().supportFragmentManager.beginTransaction()
@@ -220,15 +220,15 @@ class PeopleFragment : Fragment() {
                                     .commit()
                         }
                     }
-                    .setNegativeButton("キャンセル") { dialog, id ->
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, id ->
 
                     }
-                    .setNeutralButton("削除") { dialog, id ->
+                    .setNeutralButton(getString(R.string.delete)) { dialog, id ->
                         if (deletable) {
                             val dialog = DeletePersonConfirmDialogFragment()
                             dialog.show(requireActivity().supportFragmentManager, "deleteperson")
                         } else {
-                            Toast.makeText(requireActivity(), "一人しか登録がないため削除できません", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireActivity(), getString(R.string.error_delete_person), Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -242,7 +242,7 @@ class PeopleFragment : Fragment() {
                 }
             }
 
-            editPersonView.nameText.setText(ConfigManager().loadTargetPersonName())
+            editPersonView.nameText.setText(ConfigManager.loadTargetPersonName())
             editPersonView.requestFocus()
 
             return builder.create()
@@ -254,12 +254,12 @@ class PeopleFragment : Fragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val builder = AlertDialog.Builder(requireActivity())
 
-            val personId = ConfigManager().loadTargetPersonId()
-            val personName = ConfigManager().loadTargetPersonName()
+            val personId = ConfigManager.loadTargetPersonId()
+            val personName = ConfigManager.loadTargetPersonName()
 
-            builder.setTitle("確認")
-                    .setMessage(personName+"さんの情報を削除します。よろしいですか？")
-                    .setPositiveButton("OK", { dialog, id ->
+            builder.setTitle(getString(R.string.confirm))
+                    .setMessage(getString(R.string.confirm_delete_person, personName))
+                    .setPositiveButton(getString(R.string.ok), { dialog, id ->
                         val dao = database.personDao()
                         val temperatureDao = database.temperatureDao()
                         val myExecutor = Executors.newSingleThreadExecutor()
@@ -274,15 +274,15 @@ class PeopleFragment : Fragment() {
                             }
 
                             val personList = dao.getAllPerson()
-                            ConfigManager().saveTargetPersonId(personList[0].personId)
-                            ConfigManager().saveTargetPersonName(personList[0].name)
+                            ConfigManager.saveTargetPersonId(personList[0].personId)
+                            ConfigManager.saveTargetPersonName(personList[0].name)
 
                             requireActivity().supportFragmentManager.beginTransaction()
                                     .replace(R.id.frameLayout, PeopleFragment())
                                     .commit()
                         }
                     })
-                    .setNegativeButton("キャンセル", { dialog, id ->
+                    .setNegativeButton(getString(R.string.cancel), { dialog, id ->
 
                     })
 

@@ -45,7 +45,7 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:padding="12dp"
-            android:text="変更"
+            android:text="@string/chg"
             android:textSize="12sp" />
 
         <Button

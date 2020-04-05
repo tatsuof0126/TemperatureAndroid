@@ -66,16 +66,26 @@ class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnL
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_temperature_main)
 
-        val targetPersonId = ConfigManager().loadTargetPersonId()
+        val targetPersonId = ConfigManager.loadTargetPersonId()
         if(targetPersonId == 0){
             // 初期化処理
             val personId = 1
-            val personName = "あなた"
+            var personName = "You"
+            var useFahrenheitFlag = false
+            if (Locale.getDefault().equals(Locale.JAPAN)) {
+                personName = "あなた"
+            }
 
-            ConfigManager().saveTargetPersonId(personId)
-            ConfigManager().saveTargetPersonName(personName)
+            if (Locale.getDefault().equals((Locale.US))) {
+                // アメリカだけ華氏、それ以外は摂氏を使う
+                useFahrenheitFlag = true
+            }
 
-            val database = Room.databaseBuilder(this.applicationContext, objectOf<TemperatureDatabase>(), "temperature_database.db").build()
+            ConfigManager.saveTargetPersonId(personId)
+            ConfigManager.saveTargetPersonName(personName)
+            ConfigManager.saveUseFahrenheitFlag(useFahrenheitFlag)
+
+            val database = Room.databaseBuilder(this.applicationContext, TemperatureDatabase::class.java, "temperature_database.db").build()
             val dao = database.personDao()
 
             val myExecutor = Executors.newSingleThreadExecutor()
@@ -91,7 +101,7 @@ class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnL
         }
 
         // AdMobの設定
-        if (ConfigManager().loadShowAdsFlag()) {
+        if (ConfigManager.loadShowAdsFlag()) {
             // アプリID（本番）：ca-app-pub-6719193336347757~4001892480
             // アプリID（テスト）: ca-app-pub-3940256099942544~3347511713
             MobileAds.initialize(this, "ca-app-pub-6719193336347757~4001892480")
@@ -148,7 +158,7 @@ class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnL
         super.onResume()
 
         // 保存からの戻りの場合はインタースティシャル広告を表示
-        if (ConfigManager().loadUpdatedDataFlag() && ConfigManager().loadShowAdsFlag()) {
+        if (ConfigManager.loadUpdatedDataFlag() && ConfigManager.loadShowAdsFlag()) {
             if (mInterstitialAd.isLoaded && Random.nextInt(100) <= INTERSTITIAL_RATE) {
                 mInterstitialAd.show()
             }
@@ -171,14 +181,14 @@ class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnL
                 true
             }
             R.id.graphdays3 -> {
-                ConfigManager().saveGraphType(1)
+                ConfigManager.saveGraphType(1)
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.frameLayout, GraphFragment())
                         .commit()
                 true
             }
             R.id.graphdays7 -> {
-                ConfigManager().saveGraphType(2)
+                ConfigManager.saveGraphType(2)
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.frameLayout, GraphFragment())
                         .commit()

@@ -18,6 +18,15 @@ data class Temperature constructor(
         var conditions: String = "",
         var memo: String = ""
 ){
+
+        fun getFahrenheitTemperature() : Double {
+                return temperature * 9f / 5f + 32f
+        }
+
+        fun setTemperatureFromFahrenheit(fahrenheitTemperature : Double) {
+                temperature = (fahrenheitTemperature - 32f) * 5f / 9f
+        }
+
         fun getConditionString() : String {
                 val conditionString = StringBuilder()
 

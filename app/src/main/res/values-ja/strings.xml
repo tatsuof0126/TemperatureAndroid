@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">熱はかった？</string>
+
+    <string name="date">日時</string>
+
+    <string name="change">変更</string>
+    <string name="chg">変更</string>
+
+    <string name="temperature">体温</string>
+
+    <string name="celsius">℃</string>
+    <string name="fahrenheit">°F</string>
+
+    <string name="condition">症状</string>
+
+    <string name="clear">クリア</string>
+
+    <string name="memo">メモ</string>
+
+    <string name="delete">削除</string>
+
+    <string name="save">保存</string>
+    <string name="edit">編集</string>
+    <string name="add">追加</string>
+    <string name="send">送信</string>
+    <string name="select">選択</string>
+
+    <string name="graphdays3">３日間グラフ</string>
+    <string name="graphdays7">７日間グラフ</string>
+
+    <string name="removeads"> 広告を削除する </string>
+    <string name="privacy_policy">プライバシーポリシー</string>
+
+    <string name="select_application">アプリケーションを選択</string>
+    <string name="permissions_not_granted">必要な権限が許可されませんでした\n設定アプリを開き権限を確認してください</string>
+
+    <string name="tab_temperature_list">体温の記録</string>
+    <string name="tab_graph">グラフ</string>
+    <string name="tab_person">人の切替</string>
+    <string name="tab_config">設定</string>
+
+    <string name="title_temperature_list">体温の記録</string>
+    <string name="title_graph">体温グラフ</string>
+    <string name="title_person">人の切替</string>
+    <string name="title_config">設定</string>
+    <string name="title_input_temperature">体温の記録</string>
+    <string name="title_select_condition">症状を選択</string>
+
+    <string name="nodata_comment1">右上の追加ボタンを押して</string>
+    <string name="nodata_comment2">体温の記録を登録してください</string>
+
+    <string name="display_in_Fahrenheit">体温を華氏で表示</string>
+
+    <string name="error_connect_failed">通信に失敗しました。しばらく経ってからやり直してください</string>
+    <string name="error_purchase_failed">購入に失敗しました。しばらく経ってからやり直してください</string>
+    <string name="message_remove_ads">広告を削除しました</string>
+
+    <string name="message_no_input_temperature">体温を入力してください</string>
+    <string name="message_invalid_temperature">体温の値が正しくありません</string>
+
+    <string name="confirm_delete_temperature">体温の記録を削除してよろしいですか？</string>
+    <string name="ok">OK</string>
+    <string name="cancel">キャンセル</string>
+
+    <string name="add_person">人の追加</string>
+    <string name="edit_name">名前の編集</string>
+    <string name="error_delete_person">一人しか登録がないため削除できません</string>
+    <string name="confirm">確認</string>
+    <string name="confirm_delete_person">%sさんの情報を削除します。よろしいですか？</string>
+
+    <string name="condition0">鼻水</string>
+    <string name="condition1">鼻づまり</string>
+    <string name="condition2">せき</string>
+    <string name="condition3">たんが出る</string>
+    <string name="condition4">くしゃみ</string>
+    <string name="condition5">のどが痛い</string>
+    <string name="condition6">頭が痛い</string>
+    <string name="condition7">体がだるい</string>
+    <string name="condition8">体が痛い</string>
+    <string name="condition9">寒気がする</string>
+    <string name="condition10">お腹が痛い</string>
+    <string name="condition11">下痢</string>
+    <string name="condition12">嘔吐</string>
+    <string name="condition13">吐き気</string>
+    <string name="condition14">食欲がない</string>
+    <string name="condition15">ゼーゼーする</string>
+    <string name="condition16">呼吸が苦しい</string>
+
+</resources>

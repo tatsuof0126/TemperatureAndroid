@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="40dp"
-        android:text="右上の追加ボタンを押して"
+        android:text="@string/nodata_comment1"
         android:textSize="16sp"
         android:visibility="gone" />
 
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="16dp"
-        android:text="体温の記録を登録してください"
+        android:text="@string/nodata_comment2"
         android:textSize="16sp"
         android:visibility="gone" />
 

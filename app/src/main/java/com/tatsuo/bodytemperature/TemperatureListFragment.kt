@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_temperature_list.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.*
 import java.util.concurrent.Executors
 
 /**
@@ -56,7 +57,7 @@ class TemperatureListFragment : Fragment() {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
 
-        database = Room.databaseBuilder(requireActivity().applicationContext, objectOf<TemperatureDatabase>(), "temperature_database.db").build()
+        database = Room.databaseBuilder(requireActivity().applicationContext, TemperatureDatabase::class.java, "temperature_database.db").build()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -81,11 +82,15 @@ class TemperatureListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val personName = ConfigManager().loadTargetPersonName()
-        if(personName != "あなた"){
-            requireActivity().setTitle(personName+"さん")
+        val personName = ConfigManager.loadTargetPersonName()
+        if(personName != "あなた" && personName != "You"){
+            if (Locale.getDefault().equals(Locale.JAPAN)) {
+                requireActivity().setTitle(personName+"さん")
+            } else {
+                requireActivity().setTitle(personName)
+            }
         } else {
-            requireActivity().setTitle("体温の記録")
+            requireActivity().setTitle(getString(R.string.title_temperature_list))
         }
 
         temperatureListView.adapter = TemperatureListViewAdapter(temperatureList, listener)
@@ -96,8 +101,8 @@ class TemperatureListFragment : Fragment() {
 
         // Log.e("***Temperature***","onResume")
 
-        if(ConfigManager().loadUpdatedDataFlag()) {
-            ConfigManager().saveUpdatedDataFlag(false)
+        if(ConfigManager.loadUpdatedDataFlag()) {
+            ConfigManager.saveUpdatedDataFlag(false)
             // Log.e("***Temperature***","updateViewAdapter")
             updateViewAdapter()
         }
@@ -112,7 +117,7 @@ class TemperatureListFragment : Fragment() {
                 // Log.e("***Temperature***","dbUpdating...")
             }
 
-            val tempList = dao.getAllTemperatureData(ConfigManager().loadTargetPersonId())
+            val tempList = dao.getAllTemperatureData(ConfigManager.loadTargetPersonId())
 
             runnable = Runnable {
                 // temperatureListView.adapter = TemperatureListViewAdapter(temperatureList, listener)
@@ -163,7 +168,7 @@ class TemperatureListFragment : Fragment() {
         intent.putExtra(Intent.EXTRA_STREAM, uri)
         // intent.putExtra(Intent.EXTRA_TEXT, "")
 
-        startActivity(Intent.createChooser(intent, "アプリケーションを選択"))
+        startActivity(Intent.createChooser(intent, getString(R.string.select_application)))
     }
 
     fun saveCapture(view: View, file: File) {
@@ -226,9 +231,7 @@ class TemperatureListFragment : Fragment() {
         if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             gotPermission(requestCode)
         } else {
-            val toast = Toast.makeText(requireActivity(),
-                    "必要な権限が許可されませんでした\n設定アプリを開き権限を確認してください", Toast.LENGTH_SHORT)
-            toast.show()
+            Toast.makeText(requireActivity(), getString(R.string.permissions_not_granted), Toast.LENGTH_SHORT).show()
         }
     }
 

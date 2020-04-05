@@ -3,6 +3,7 @@ package com.tatsuo.bodytemperature
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -11,7 +12,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.activity_input_temperature.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
+
+
 
 class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeSelectedListener, DatePickerFragment.OnDateSelectedListener {
 
@@ -34,9 +36,11 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input_temperature)
 
-        setTitle("体温の記録")
+        setTitle(getString(R.string.title_input_temperature))
 
-        database = Room.databaseBuilder(this, objectOf<TemperatureDatabase>(), "temperature_database.db").build()
+        // Room.databaseBuilder(this, objectOf<TemperatureDatabase>(), "hoge")
+        // database = Room.databaseBuilder(this, objectOf<TemperatureDatabase>(), "temperature_database.db").build()
+        database = Room.databaseBuilder(this, TemperatureDatabase::class.java,"temperature_database.db").build()
 
         val temperatureId = intent.getLongExtra("TEMPERATURE_ID", -999L)
         if(temperatureId != -999L) {
@@ -53,7 +57,7 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
                 })
             }
         } else {
-            temperature = Temperature(0, getUUID(), Date(), ConfigManager().loadTargetPersonId(), 0.0, 0, "", "")
+            temperature = Temperature(0, getUUID(), Date(), ConfigManager.loadTargetPersonId(), 0.0, 0, "", "")
             makeView()
             temperatureText.requestFocus()
         }
@@ -97,10 +101,22 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
                 val string = s.toString()
-                if (start == 1 && count == 1 &&
+                if (ConfigManager.loadUseFahrenheitFlag()== false && start == 1 && count == 1 &&
                         (string == "33" || string == "34" || string == "35" || string == "36"
                             || string == "37" || string == "38" || string == "39"
                             || string == "40" || string == "41" || string == "42")) {
+                    temperatureText.text.append('.')
+                }
+
+                if (ConfigManager.loadUseFahrenheitFlag() == true && start == 1 && count == 1 &&
+                        (string == "94" || string == "95" || string == "96" || string == "97"
+                                || string == "98" || string == "99")) {
+                    temperatureText.text.append('.')
+                }
+                if (ConfigManager.loadUseFahrenheitFlag() == true && start == 2 && count == 1 &&
+                        (string == "100"
+                                || string == "101" || string == "102" || string == "103"
+                                || string == "104" || string == "105" || string == "106")) {
                     temperatureText.text.append('.')
                 }
             }
@@ -109,15 +125,25 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
     }
 
     private fun makeView() {
-        val dateFormat = SimpleDateFormat("M'月'd'日('E')'")
+        var dateFormatString = "E, MMM d"
+        var timeFormatString = "h:mm a"
+        if (Locale.getDefault().equals(Locale.JAPAN)) {
+            dateFormatString = "M'月'd'日('E')'"
+            timeFormatString = "H:mm"
+        }
+        val dateFormat = SimpleDateFormat(dateFormatString)
         dateText.text = dateFormat.format(temperature.date)
 
-        val timeFormat = SimpleDateFormat("H:mm")
+        val timeFormat = SimpleDateFormat(timeFormatString)
         timeText.text = String.format("%5s",timeFormat.format(temperature.date))
 
         if(temperature.temperature != 0.0) {
-            val temperatureText: EditText = findViewById((R.id.temperatureText))
-            temperatureText.setText(String.format("%.1f", temperature.temperature))
+            // val temperatureText: EditText = findViewById((R.id.temperatureText))
+            if(ConfigManager.loadUseFahrenheitFlag()){
+                temperatureText.setText(String.format("%.1f", temperature.getFahrenheitTemperature()))
+            } else {
+                temperatureText.setText(String.format("%.1f", temperature.temperature))
+            }
         }
 
         conditionText.text = temperature.getConditionString()
@@ -181,11 +207,11 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
         var retString : String = ""
 
         if(temperatureText.text.toString() == ""){
-            return "体温を入力してください"
+            return getString(R.string.message_no_input_temperature)
         }
 
         if(temperatureText.text.toString().toDouble() == 0.0){
-            return "体温の値が正しくありません"
+            return getString(R.string.message_invalid_temperature)
         }
 
         return retString
@@ -194,7 +220,14 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
     private fun saveTemperature() {
         val temperatureDouble : Double = temperatureText.text.toString().toDouble()
         // Log.e("***Temperature***","temperatureDouble -> "+temperatureDouble)
-        temperature.temperature = temperatureDouble
+
+        if(ConfigManager.loadUseFahrenheitFlag()){
+            temperature.setTemperatureFromFahrenheit(temperatureDouble)
+            Log.e("***Temperature***","temperature -> "+temperatureDouble+" : "+temperature.temperature+" : "+temperature.getFahrenheitTemperature())
+        } else {
+            temperature.temperature = temperatureDouble
+        }
+
         temperature.memo = memoText.text.toString()
 
         val dao = database.temperatureDao()
@@ -205,14 +238,14 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
             TemperatureApplication.dbUpdating = false
             Log.e("***Temperature***","Inserted. record count : "+dao.count())
         }
-        ConfigManager().saveUpdatedDataFlag(true)
+        ConfigManager.saveUpdatedDataFlag(true)
     }
 
     private fun deleteTemperature() {
         AlertDialog.Builder(this) // FragmentではActivityを取得して生成
                 .setTitle("")
-                .setMessage("体温の記録を削除してよろしいですか？")
-                .setPositiveButton("OK", { dialog, which ->
+                .setMessage(getString(R.string.confirm_delete_temperature))
+                .setPositiveButton(getString(R.string.ok), { dialog, which ->
                     val dao = database.temperatureDao()
                     val myExecutor = Executors.newSingleThreadExecutor()
                     myExecutor.execute() {
@@ -221,10 +254,10 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
                         TemperatureApplication.dbUpdating = false
                         Log.e("***Temperature***","Deleted.")
                     }
-                    ConfigManager().saveUpdatedDataFlag(true)
+                    ConfigManager.saveUpdatedDataFlag(true)
                     finish()
                 })
-                .setNegativeButton("キャンセル", { dialog, which ->
+                .setNegativeButton(getString(R.string.cancel), { dialog, which ->
                 })
                 .show()
     }

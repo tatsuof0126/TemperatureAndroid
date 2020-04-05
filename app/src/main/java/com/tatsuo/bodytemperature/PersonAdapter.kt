@@ -1,6 +1,5 @@
 package com.tatsuo.bodytemperature
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,7 @@ class PersonAdapter(val personList: List<Person>) : RecyclerView.Adapter<PersonA
         holder.personName.text = personList[position].name
 
         holder.personRadio.setOnCheckedChangeListener(null)
-        if(holder.personId == ConfigManager().loadTargetPersonId()) {
+        if(holder.personId == ConfigManager.loadTargetPersonId()) {
             holder.personRadio.isChecked = true
         } else {
             holder.personRadio.isChecked = false
@@ -29,13 +28,10 @@ class PersonAdapter(val personList: List<Person>) : RecyclerView.Adapter<PersonA
 
         holder.personRadio.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
-                ConfigManager().saveTargetPersonId(holder.personId)
-                ConfigManager().saveTargetPersonName(holder.personName.text.toString())
-                Log.e("PersonAdapter","position : "+position+"  isChecked : "+isChecked)
+                ConfigManager.saveTargetPersonId(holder.personId)
+                ConfigManager.saveTargetPersonName(holder.personName.text.toString())
+                // Log.e("PersonAdapter","position : "+position+"  isChecked : "+isChecked)
                 notifyDataSetChanged()
-            } else {
-                Log.e("PersonAdapter","position : "+position+"  isChecked : "+isChecked)
-                // notifyDataSetChanged()
             }
         }
     }

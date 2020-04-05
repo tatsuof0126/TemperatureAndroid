@@ -51,15 +51,21 @@ class ConfigFragment : Fragment(), PurchasesUpdatedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        versionText.text = "熱はかった？ ver"+BuildConfig.VERSION_NAME
 
-        requireActivity().setTitle("設定")
+        requireActivity().setTitle(getString(R.string.title_config))
 
-        if(ConfigManager().loadShowAdsFlag()){
+        if(ConfigManager.loadShowAdsFlag()){
             purchaseRemoveAdsButton.visibility = View.VISIBLE
         } else {
             purchaseRemoveAdsButton.visibility = View.GONE
         }
+
+        fahrenheitCheck.isChecked = ConfigManager.loadUseFahrenheitFlag()
+        fahrenheitCheck.setOnClickListener(View.OnClickListener {
+            ConfigManager.saveUseFahrenheitFlag(fahrenheitCheck.isChecked)
+        })
+
+        versionText.text = getString(R.string.app_name)+" ver"+BuildConfig.VERSION_NAME
 
         // BillingClientを初期化
         billingClient = BillingClient.newBuilder(requireActivity()).enablePendingPurchases().setListener(this).build()
@@ -90,7 +96,7 @@ class ConfigFragment : Fragment(), PurchasesUpdatedListener {
 
     private fun purchaseRemoveAds() {
         if(billingClient.isReady == false){
-            Toast.makeText(activity, "通信に失敗しました。しばらく経ってからやり直してください", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.error_connect_failed), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -104,7 +110,7 @@ class ConfigFragment : Fragment(), PurchasesUpdatedListener {
                 val billingFlowParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetailsList[0]).build()
                 billingClient.launchBillingFlow(activity, billingFlowParams)
             } else {
-                Toast.makeText(activity, "通信に失敗しました。しばらく経ってからやり直してください Code : "+responseCode, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.error_connect_failed)+" Code : "+responseCode, Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -115,14 +121,14 @@ class ConfigFragment : Fragment(), PurchasesUpdatedListener {
         if ((purchases != null && billingResult.responseCode == BillingClient.BillingResponseCode.OK) ||
                 billingResult.responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
             // 購入成功。広告を削除する。
-            ConfigManager().saveShowAdsFlag(false)
+            ConfigManager.saveShowAdsFlag(false)
             purchaseRemoveAdsButton.visibility = View.GONE
             (requireActivity() as TemperatureMainActivity).removeAds()
-            Toast.makeText(activity, "広告を削除しました", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.message_remove_ads), Toast.LENGTH_SHORT).show()
         } else if(billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED){
             return
         } else {
-            Toast.makeText(activity, "購入に失敗しました。しばらく経ってからやり直してください Code : "+billingResult.responseCode, Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.error_purchase_failed)+" Code : "+billingResult.responseCode, Toast.LENGTH_SHORT).show()
         }
     }
 

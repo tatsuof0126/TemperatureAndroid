@@ -5,14 +5,14 @@
     <item
         android:id="@+id/sendTemperature"
         android:icon="@drawable/ic_send_white_24dp"
-        android:title="送信"
+        android:title="@string/send"
         app:showAsAction="always|withText"
         android:orderInCategory="100" />
 
     <item
         android:id="@+id/addTemperature"
         android:icon="@drawable/ic_add_white_24dp"
-        android:title="追加"
+        android:title="@string/add"
         app:showAsAction="always|withText"
         android:orderInCategory="110" />
 

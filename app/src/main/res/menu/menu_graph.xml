@@ -5,22 +5,22 @@
     <item
         android:id="@+id/sendGraph"
         android:icon="@drawable/ic_send_white_24dp"
-        android:title="送信"
+        android:title="@string/send"
         app:showAsAction="always|withText"
         android:orderInCategory="100" />
 
     <item
         android:id="@+id/changeType"
         android:icon="@drawable/ic_timeline_white_24dp"
-        android:title="変更"
+        android:title="@string/change"
         app:showAsAction="always|withText"
         android:orderInCategory="110">
 
         <menu>
             <item android:id="@+id/graphdays3"
-                android:title="３日間グラフ" />
+                android:title="@string/graphdays3" />
             <item android:id="@+id/graphdays7"
-                android:title="７日間グラフ" />
+                android:title="@string/graphdays7" />
         </menu>
 
     </item>

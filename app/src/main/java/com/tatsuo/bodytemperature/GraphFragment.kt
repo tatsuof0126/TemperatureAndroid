@@ -73,14 +73,18 @@ class GraphFragment : Fragment() , DatePickerFragment.OnDateSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val personName = ConfigManager().loadTargetPersonName()
-        if(personName != "あなた"){
-            requireActivity().setTitle(personName+"さん")
+        val personName = ConfigManager.loadTargetPersonName()
+        if(personName != "あなた" && personName != "You"){
+            if (Locale.getDefault().equals(Locale.JAPAN)) {
+                requireActivity().setTitle(personName+"さん")
+            } else {
+                requireActivity().setTitle(personName)
+            }
         } else {
-            requireActivity().setTitle("体温グラフ")
+            requireActivity().setTitle(getString(R.string.title_graph))
         }
 
-        database = Room.databaseBuilder(requireActivity().applicationContext, objectOf<TemperatureDatabase>(), "temperature_database.db").build()
+        database = Room.databaseBuilder(requireActivity().applicationContext, TemperatureDatabase::class.java, "temperature_database.db").build()
 
         makeView()
 
@@ -115,10 +119,14 @@ class GraphFragment : Fragment() , DatePickerFragment.OnDateSelectedListener {
     }
 
     private fun makeView(){
-        val dateFormat = SimpleDateFormat("M'月'd'日('E')'")
+        var dateFormatString = "E, MMM d"
+        if (Locale.getDefault().equals(Locale.JAPAN)) {
+            dateFormatString = "M'月'd'日('E')'"
+        }
+        val dateFormat = SimpleDateFormat(dateFormatString)
         targetDateText.text = dateFormat.format((requireActivity() as TemperatureMainActivity).targetDate)
 
-        val graphType = ConfigManager().loadGraphType()
+        val graphType = ConfigManager.loadGraphType()
         graphView.graphType = graphType
 
         val cal = Calendar.getInstance()
@@ -139,7 +147,7 @@ class GraphFragment : Fragment() , DatePickerFragment.OnDateSelectedListener {
         val dao = database.temperatureDao()
         val myExecutor = Executors.newSingleThreadExecutor()
         myExecutor.execute() {
-            temperatureList = dao.getTemperatureData(ConfigManager().loadTargetPersonId(), beforDate, afterDate)
+            temperatureList = dao.getTemperatureData(ConfigManager.loadTargetPersonId(), beforDate, afterDate)
             graphView.targetDate = (requireActivity() as TemperatureMainActivity).targetDate
             graphView.temperatureList = temperatureList
 
@@ -215,7 +223,7 @@ class GraphFragment : Fragment() , DatePickerFragment.OnDateSelectedListener {
         intent.putExtra(Intent.EXTRA_STREAM, uri)
         // intent.putExtra(Intent.EXTRA_TEXT, "")
 
-        startActivity(Intent.createChooser(intent, "アプリケーションを選択"))
+        startActivity(Intent.createChooser(intent, getString(R.string.select_application)))
     }
 
     fun saveCapture(view: View, file: File) {
@@ -278,9 +286,7 @@ class GraphFragment : Fragment() , DatePickerFragment.OnDateSelectedListener {
         if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             gotPermission(requestCode)
         } else {
-            val toast = Toast.makeText(requireActivity(),
-                    "必要な権限が許可されませんでした\n設定アプリを開き権限を確認してください", Toast.LENGTH_SHORT)
-            toast.show()
+            Toast.makeText(requireActivity(), getString(R.string.permissions_not_granted), Toast.LENGTH_SHORT).show()
         }
     }
 
