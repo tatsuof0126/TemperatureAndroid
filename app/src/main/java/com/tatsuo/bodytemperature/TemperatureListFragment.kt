@@ -124,15 +124,16 @@ class TemperatureListFragment : Fragment() {
                 temperatureList.clear()
                 temperatureList.addAll(tempList)
                 Log.e("***Temperature***","temperatureList size : "+temperatureList.size)
-                temperatureListView.adapter?.notifyDataSetChanged()
+
+                temperatureListView?.adapter?.notifyDataSetChanged()
                 if (temperatureList.size == 0) {
-                    temperatureListView.visibility = View.GONE
-                    nodatemessage1.visibility = View.VISIBLE
-                    nodatemessage2.visibility = View.VISIBLE
+                    temperatureListView?.visibility = View.GONE
+                    nodatemessage1?.visibility = View.VISIBLE
+                    nodatemessage2?.visibility = View.VISIBLE
                 } else {
-                    temperatureListView.visibility = View.VISIBLE
-                    nodatemessage1.visibility = View.GONE
-                    nodatemessage2.visibility = View.GONE
+                    temperatureListView?.visibility = View.VISIBLE
+                    nodatemessage1?.visibility = View.GONE
+                    nodatemessage2?.visibility = View.GONE
                 }
             }
             handler.post(runnable)

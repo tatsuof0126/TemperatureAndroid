@@ -119,18 +119,20 @@ class GraphFragment : Fragment() , DatePickerFragment.OnDateSelectedListener {
     }
 
     private fun makeView(){
+        val targetDate = (requireActivity() as TemperatureMainActivity).targetDate
+
         var dateFormatString = "E, MMM d"
         if (Locale.getDefault().equals(Locale.JAPAN)) {
             dateFormatString = "M'月'd'日('E')'"
         }
         val dateFormat = SimpleDateFormat(dateFormatString)
-        targetDateText.text = dateFormat.format((requireActivity() as TemperatureMainActivity).targetDate)
+        targetDateText.text = dateFormat.format(targetDate)
 
         val graphType = ConfigManager.loadGraphType()
         graphView.graphType = graphType
 
         val cal = Calendar.getInstance()
-        cal.time = (requireActivity() as TemperatureMainActivity).targetDate
+        cal.time = targetDate
         cal.add(Calendar.DATE, 1)
         cal.set(Calendar.HOUR_OF_DAY, 0)
         cal.set(Calendar.MINUTE, 0)
@@ -148,11 +150,11 @@ class GraphFragment : Fragment() , DatePickerFragment.OnDateSelectedListener {
         val myExecutor = Executors.newSingleThreadExecutor()
         myExecutor.execute() {
             temperatureList = dao.getTemperatureData(ConfigManager.loadTargetPersonId(), beforDate, afterDate)
-            graphView.targetDate = (requireActivity() as TemperatureMainActivity).targetDate
-            graphView.temperatureList = temperatureList
+            graphView?.targetDate = targetDate
+            graphView?.temperatureList = temperatureList
 
             runnable = Runnable {
-                graphView.invalidate()
+                graphView?.invalidate()
             }
             handler.post(runnable)
         }

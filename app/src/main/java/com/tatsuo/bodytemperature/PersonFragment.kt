@@ -70,7 +70,9 @@ class PeopleFragment : Fragment() {
         myExecutor.execute() {
             var personList = dao.getAllPerson()
             handler.post(Runnable() {
-                personListView.adapter = PersonAdapter(personList)
+                if(personListView != null) {
+                    personListView.adapter = PersonAdapter(personList)
+                }
             })
         }
     }

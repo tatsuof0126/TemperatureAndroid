@@ -146,6 +146,12 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
             }
         }
 
+        if(ConfigManager.loadUseFahrenheitFlag()){
+            unitText.setText(getString(R.string.fahrenheit))
+        } else {
+            unitText.setText(getString(R.string.celsius))
+        }
+
         conditionText.text = temperature.getConditionString()
 
         if(temperature.conditions == ""){
@@ -210,7 +216,11 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
             return getString(R.string.message_no_input_temperature)
         }
 
-        if(temperatureText.text.toString().toDouble() == 0.0){
+        var temperature : Double = 0.0
+        try {
+            temperature = temperatureText.text.toString().toDouble()
+        } catch (nfe : NumberFormatException){}
+        if(temperature == 0.0){
             return getString(R.string.message_invalid_temperature)
         }
 
