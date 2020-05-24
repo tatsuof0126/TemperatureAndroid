@@ -27,6 +27,8 @@
 
     <string name="graphdays3">3 days Graph</string>
     <string name="graphdays7">7 days Graph</string>
+    <string name="graphdays14">14 days Graph</string>
+    <string name="graphdays30">30 days Graph</string>
 
     <string name="removeads">Remove Ads</string>
     <string name="privacy_policy">Privacy Policy</string>

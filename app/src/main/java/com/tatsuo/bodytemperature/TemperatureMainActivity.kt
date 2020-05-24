@@ -195,6 +195,20 @@ class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnL
                         .commit()
                 true
             }
+            R.id.graphdays14 -> {
+                ConfigManager.saveGraphType(3)
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, GraphFragment())
+                        .commit()
+                true
+            }
+            R.id.graphdays30 -> {
+                ConfigManager.saveGraphType(4)
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, GraphFragment())
+                        .commit()
+                true
+            }
             else -> {
                 super.onOptionsItemSelected(item)
             }

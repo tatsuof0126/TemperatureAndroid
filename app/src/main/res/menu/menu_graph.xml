@@ -21,6 +21,10 @@
                 android:title="@string/graphdays3" />
             <item android:id="@+id/graphdays7"
                 android:title="@string/graphdays7" />
+            <item android:id="@+id/graphdays14"
+                android:title="@string/graphdays14" />
+            <item android:id="@+id/graphdays30"
+                android:title="@string/graphdays30" />
         </menu>
 
     </item>

@@ -27,6 +27,8 @@
 
     <string name="graphdays3">３日間グラフ</string>
     <string name="graphdays7">７日間グラフ</string>
+    <string name="graphdays14">14日間グラフ</string>
+    <string name="graphdays30">30日間グラフ</string>
 
     <string name="removeads"> 広告を削除する </string>
     <string name="privacy_policy">プライバシーポリシー</string>

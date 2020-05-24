@@ -89,6 +89,29 @@ class GraphView : View {
             canvas.drawLine(73f * wRate, (baseY-4f)*hRate, 73f * wRate, (baseY+4f)*hRate, paint)
             canvas.drawLine(85f * wRate, (baseY-4f)*hRate, 85f * wRate, (baseY+4f)*hRate, paint)
             canvas.drawLine(97f * wRate, (baseY-4f)*hRate, 97f * wRate, (baseY+4f)*hRate, paint)
+        } else if(graphType == 3){
+            // 14日間グラフ
+            canvas.drawLine(13f * wRate, (baseY-4f)*hRate, 13f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(19f * wRate, (baseY-4f)*hRate, 19f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(25f * wRate, (baseY-4f)*hRate, 25f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(31f * wRate, (baseY-4f)*hRate, 31f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(37f * wRate, (baseY-4f)*hRate, 37f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(43f * wRate, (baseY-4f)*hRate, 43f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(49f * wRate, (baseY-4f)*hRate, 49f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(55f * wRate, (baseY-4f)*hRate, 55f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(61f * wRate, (baseY-4f)*hRate, 61f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(67f * wRate, (baseY-4f)*hRate, 67f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(73f * wRate, (baseY-4f)*hRate, 73f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(79f * wRate, (baseY-4f)*hRate, 79f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(85f * wRate, (baseY-4f)*hRate, 85f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(91f * wRate, (baseY-4f)*hRate, 91f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(97f * wRate, (baseY-4f)*hRate, 97f * wRate, (baseY+4f)*hRate, paint)
+        } else if(graphType == 4){
+            canvas.drawLine(18.6f * wRate, (baseY-4f)*hRate, 18.6f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(38.2f * wRate, (baseY-4f)*hRate, 38.2f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(57.8f * wRate, (baseY-4f)*hRate, 57.8f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(77.4f * wRate, (baseY-4f)*hRate, 77.4f * wRate, (baseY+4f)*hRate, paint)
+            canvas.drawLine(97f * wRate, (baseY-4f)*hRate, 97f * wRate, (baseY+4f)*hRate, paint)
         }
 
         paint.style = Paint.Style.FILL
@@ -146,6 +169,42 @@ class GraphView : View {
                 canvas.drawText(str5, (64f-getAdjustX(str5)) * wRate, (baseY+4f)*hRate, paint)
                 canvas.drawText(str6, (76f-getAdjustX(str6)) * wRate, (baseY+4f)*hRate, paint)
                 canvas.drawText(str7, (88f-getAdjustX(str7)) * wRate, (baseY+4f)*hRate, paint)
+            } else if(graphType == 3) {
+                val str7: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+                cal.add(Calendar.DATE, -2)
+                val str6: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+                cal.add(Calendar.DATE, -2)
+                val str5: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+                cal.add(Calendar.DATE, -2)
+                val str4: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+                cal.add(Calendar.DATE, -2)
+                val str3: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+                cal.add(Calendar.DATE, -2)
+                val str2: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+                cal.add(Calendar.DATE, -2)
+                val str1: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+
+                canvas.drawText(str1, (19f - getAdjustX(str1)) * wRate, (baseY + 7f) * hRate, paint)
+                canvas.drawText(str2, (31f - getAdjustX(str2)) * wRate, (baseY + 7f) * hRate, paint)
+                canvas.drawText(str3, (43f - getAdjustX(str3)) * wRate, (baseY + 7f) * hRate, paint)
+                canvas.drawText(str4, (55f - getAdjustX(str4)) * wRate, (baseY + 7f) * hRate, paint)
+                canvas.drawText(str5, (67f - getAdjustX(str5)) * wRate, (baseY + 7f) * hRate, paint)
+                canvas.drawText(str6, (79f - getAdjustX(str6)) * wRate, (baseY + 7f) * hRate, paint)
+                canvas.drawText(str7, (91f - getAdjustX(str7)) * wRate, (baseY + 7f) * hRate, paint)
+            } else if(graphType == 4){
+                cal.add(Calendar.DATE, -6)
+                val str4: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+                cal.add(Calendar.DATE, -7)
+                val str3: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+                cal.add(Calendar.DATE, -7)
+                val str2: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+                cal.add(Calendar.DATE, -7)
+                val str1: String = (cal.get(Calendar.MONTH) + 1).toString() + "/" + cal.get(Calendar.DAY_OF_MONTH).toString()
+
+                canvas.drawText(str1, 19.2f * wRate, (baseY+4f)*hRate, paint)
+                canvas.drawText(str2, 38.8f * wRate, (baseY+4f)*hRate, paint)
+                canvas.drawText(str3, 58.4f * wRate, (baseY+4f)*hRate, paint)
+                canvas.drawText(str4, 78f * wRate, (baseY+4f)*hRate, paint)
             }
         }
 
@@ -174,6 +233,10 @@ class GraphView : View {
                 cal.add(Calendar.DATE, 1-3)
             } else if(graphType == 2){
                 cal.add(Calendar.DATE, 1-7)
+            } else if(graphType == 3){
+                cal.add(Calendar.DATE, 1-14)
+            } else if(graphType == 4){
+                cal.add(Calendar.DATE, 1-30)
             }
             cal.set(Calendar.HOUR_OF_DAY, 0)
             cal.set(Calendar.MINUTE, 0)
@@ -186,6 +249,10 @@ class GraphView : View {
                 tempX = (temperature.date.time - beforDate.time) * 78f / (1000f * 60 * 60 * 24 * 3) + 14f
             } else if(graphType == 2){
                 tempX = (temperature.date.time - beforDate.time) * 84f / (1000f * 60 * 60 * 24 * 7) + 13f
+            } else if(graphType == 3){
+                tempX = (temperature.date.time - beforDate.time) * 84f / (1000f * 60 * 60 * 24 * 14) + 13f
+            } else if(graphType == 4){
+                tempX = (temperature.date.time - beforDate.time) * 84f / (1000f * 60 * 60 * 24 * 30) + 13f
             }
 
             paint.color = Color.argb(255, 255, 0, 0)

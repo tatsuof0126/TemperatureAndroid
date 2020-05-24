@@ -143,6 +143,10 @@ class GraphFragment : Fragment() , DatePickerFragment.OnDateSelectedListener {
             cal.add(Calendar.DATE, -3)
         } else if(graphType == 2){
             cal.add(Calendar.DATE, -7)
+        } else if(graphType == 3){
+            cal.add(Calendar.DATE, -14)
+        } else if(graphType == 4){
+            cal.add(Calendar.DATE, -30)
         }
         val beforDate = cal.time
         
