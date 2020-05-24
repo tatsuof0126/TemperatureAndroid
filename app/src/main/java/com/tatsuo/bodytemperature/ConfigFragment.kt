@@ -26,7 +26,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ConfigFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ConfigFragment : Fragment(), PurchasesUpdatedListener {
+class ConfigFragment : Fragment(), PurchasesUpdatedListener, AcknowledgePurchaseResponseListener {
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -118,18 +118,48 @@ class ConfigFragment : Fragment(), PurchasesUpdatedListener {
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
         Log.e("***onPurchasesUpdated", "billingResult code : "+billingResult.responseCode)
 
-        if ((purchases != null && billingResult.responseCode == BillingClient.BillingResponseCode.OK) ||
-                billingResult.responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
-            // 購入成功。広告を削除する。
-            ConfigManager.saveShowAdsFlag(false)
-            purchaseRemoveAdsButton.visibility = View.GONE
-            (requireActivity() as TemperatureMainActivity).removeAds()
-            Toast.makeText(activity, getString(R.string.message_remove_ads), Toast.LENGTH_SHORT).show()
+        if (purchases != null && billingResult.responseCode == BillingClient.BillingResponseCode.OK){
+            // 購入成功
+            for (purchase in purchases) {
+                if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED){
+                    if(purchase.isAcknowledged){
+                        // 購入が承認済みなら広告を削除
+                        removeAds()
+                    } else {
+                        // 購入が未承認なら承認する
+                        val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                                .setPurchaseToken(purchase.purchaseToken)
+                                .build()
+                        billingClient.acknowledgePurchase(acknowledgePurchaseParams, this)
+                    }
+                }
+            }
+        } else if(billingResult.responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+            // すでに購入済みであれば広告を削除
+            removeAds()
         } else if(billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED){
             return
         } else {
             Toast.makeText(activity, getString(R.string.error_purchase_failed)+" Code : "+billingResult.responseCode, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onAcknowledgePurchaseResponse(billingResult: BillingResult) {
+        Log.e("***onAcknowledgePurcha", "billingResult code : "+billingResult.responseCode)
+
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+            // 承認成功なら広告を削除
+            removeAds()
+        } else {
+            Toast.makeText(activity, getString(R.string.error_purchase_failed)+" Code : "+billingResult.responseCode, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun removeAds(){
+        ConfigManager.saveShowAdsFlag(false)
+        purchaseRemoveAdsButton.visibility = View.GONE
+        (requireActivity() as TemperatureMainActivity).removeAds()
+        Toast.makeText(activity, getString(R.string.message_remove_ads), Toast.LENGTH_SHORT).show()
     }
 
     // TODO: Rename method, update argument and hook method into UI event

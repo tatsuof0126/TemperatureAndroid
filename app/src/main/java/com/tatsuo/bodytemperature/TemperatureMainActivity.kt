@@ -24,7 +24,7 @@ class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnL
     private lateinit var mInterstitialAd: InterstitialAd
     private val bannerAdRequest = AdRequest.Builder().addTestDevice("276EB5AF5B07A5B142631A70BEE353EE").addTestDevice("08F7DFA353E42A1A2C190B38622A90BD").build()
     private val interstitialAdRequest = AdRequest.Builder().addTestDevice("276EB5AF5B07A5B142631A70BEE353EE").addTestDevice("08F7DFA353E42A1A2C190B38622A90BD").build()
-    private val INTERSTITIAL_RATE = 25
+    private val INTERSTITIAL_RATE = 35
 
     // HUAWEI：276EB5AF5B07A5B142631A70BEE353EE、ASUS：08F7DFA353E42A1A2C190B38622A90BD
     // val bannerAdRequest = AdRequest.Builder().build()
@@ -105,6 +105,7 @@ class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnL
             // アプリID（本番）：ca-app-pub-6719193336347757~4001892480
             // アプリID（テスト）: ca-app-pub-3940256099942544~3347511713
             MobileAds.initialize(this, "ca-app-pub-6719193336347757~4001892480")
+            MobileAds.setAppVolume(0.1f);
 
             mAdView = findViewById(R.id.adView)
 

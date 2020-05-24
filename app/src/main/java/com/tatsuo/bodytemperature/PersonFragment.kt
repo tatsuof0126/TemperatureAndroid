@@ -178,9 +178,11 @@ class PeopleFragment : Fragment() {
                                 person.name = personName
                                 dao.insert(person)
 
-                                requireActivity().supportFragmentManager.beginTransaction()
-                                        .replace(R.id.frameLayout, PeopleFragment())
-                                        .commit()
+                                if(activity != null) {
+                                    requireActivity().supportFragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout, PeopleFragment())
+                                            .commit()
+                                }
                             }
                         }
                     }
@@ -279,9 +281,11 @@ class PeopleFragment : Fragment() {
                             ConfigManager.saveTargetPersonId(personList[0].personId)
                             ConfigManager.saveTargetPersonName(personList[0].name)
 
-                            requireActivity().supportFragmentManager.beginTransaction()
-                                    .replace(R.id.frameLayout, PeopleFragment())
-                                    .commit()
+                            if(activity != null) {
+                                requireActivity().supportFragmentManager.beginTransaction()
+                                        .replace(R.id.frameLayout, PeopleFragment())
+                                        .commit()
+                            }
                         }
                     })
                     .setNegativeButton(getString(R.string.cancel), { dialog, id ->
