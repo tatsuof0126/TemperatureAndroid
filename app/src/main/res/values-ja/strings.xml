@@ -35,6 +35,8 @@
 
     <string name="select_application">アプリケーションを選択</string>
     <string name="permissions_not_granted">必要な権限が許可されませんでした\n設定アプリを開き権限を確認してください</string>
+    <string name="send_subject">体温の記録</string>
+    <string name="send_body_title">アプリ「熱はかった？」から送信</string>
 
     <string name="tab_temperature_list">体温の記録</string>
     <string name="tab_graph">グラフ</string>

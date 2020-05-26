@@ -1,21 +1,11 @@
 package com.tatsuo.bodytemperature
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.util.Log
 import android.view.*
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,9 +14,7 @@ import androidx.room.Room
 import com.tatsuo.bodytemperature.db.Temperature
 import com.tatsuo.bodytemperature.db.TemperatureDatabase
 import kotlinx.android.synthetic.main.fragment_temperature_list.*
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -43,8 +31,6 @@ class TemperatureListFragment : Fragment() {
     private var listener: OnListFragmentInteractionListener? = null
 
     private val temperatureList = mutableListOf<Temperature>()
-
-    private val REQUEST_CODE_SEND_TEMPERATURE_LIST = 101
 
     private val handler = Handler()
     private var runnable = Runnable {}
@@ -141,105 +127,55 @@ class TemperatureListFragment : Fragment() {
     }
 
     private fun sendTemperatureList(){
-        if(hasPermission() == false){
-            requestPermission(REQUEST_CODE_SEND_TEMPERATURE_LIST)
-            return
+        // 送信内容の作成
+        val sendBody = StringBuilder()
+        sendBody.append(getString(R.string.send_body_title))
+        sendBody.append("\n")
+        sendBody.append("---\n")
+        for(temperature in temperatureList){
+            sendBody.append(makeTemperatureString(temperature))
+            sendBody.append("\n")
         }
-
-        val file = File(Environment.getExternalStorageDirectory().toString() + "/capture.png")
-        file.getParentFile().mkdir()
-
-        saveCapture(temperatureListView, file)
 
         // Intentで送信
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
-        intent.type = "image/png"
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED or
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-
-        val uri: Uri
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            uri = Uri.fromFile(file)
-        } else {
-            uri = FileProvider.getUriForFile(requireActivity(),
-                    BuildConfig.APPLICATION_ID + ".fileprovider", file)
-        }
-
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        // intent.putExtra(Intent.EXTRA_TEXT, "")
+        intent.type = "text/plain"
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.send_subject))
+        intent.putExtra(Intent.EXTRA_TEXT, sendBody.toString())
 
         startActivity(Intent.createChooser(intent, getString(R.string.select_application)))
     }
 
-    fun saveCapture(view: View, file: File) {
-        // キャプチャを撮る
-        val capture = getViewCapture(view)
+    private fun makeTemperatureString(temperature: Temperature) : String{
+        val retString = StringBuilder()
 
-        var fos: FileOutputStream? = null
-        try {
-            fos = FileOutputStream(file, false)
-            // 画像のフォーマットと画質と出力先を指定して保存
-            capture!!.compress(Bitmap.CompressFormat.PNG,100, fos)
-            fos.flush()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("***CAPTURE***", "EXCEPTION", e)
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close()
-                } catch (ie: IOException) {
-                    fos = null
-                }
-
-            }
+        var dateFormatString = "E, MMM d h:mm a"
+        if (Locale.getDefault().equals(Locale.JAPAN)) {
+            dateFormatString = "M'月'd'日('E')' H:mm"
         }
-    }
+        val dateFormat = SimpleDateFormat(dateFormatString)
+        retString.append(dateFormat.format(temperature.date))
+        retString.append(" ")
 
-    fun getViewCapture(view: View): Bitmap? {
-        view.isDrawingCacheEnabled = true
-
-        view.drawingCacheBackgroundColor = Color.WHITE
-
-        // Viewのキャプチャを取得
-        val cache = view.drawingCache ?: return null
-
-        // view.getDrawingCache(false)
-
-        val screenShot = Bitmap.createBitmap(cache)
-        view.isDrawingCacheEnabled = false
-
-        return screenShot
-    }
-
-    fun hasPermission(): Boolean {
-        // API 23より前ならチェック不要
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
-
-        return ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-    }
-
-    fun requestPermission(requestCode: Int) {
-        requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), requestCode)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            gotPermission(requestCode)
+        if(ConfigManager.loadUseFahrenheitFlag()){
+            retString.append(String.format("%.1f", temperature.getFahrenheitTemperature()) + "°F")
         } else {
-            Toast.makeText(requireActivity(), getString(R.string.permissions_not_granted), Toast.LENGTH_SHORT).show()
+            retString.append(String.format("%.1f", temperature.temperature) + "℃")
         }
-    }
+        retString.append(" ")
 
-    fun gotPermission(requestCode: Int) {
-        if (requestCode == REQUEST_CODE_SEND_TEMPERATURE_LIST) {
-            sendTemperatureList()
+        if(temperature.getConditionString() != "") {
+            retString.append(temperature.getConditionString())
+            retString.append(" ")
         }
+
+        if(temperature.memo != ""){
+            retString.append("["+temperature.memo+"]")
+        }
+
+        return retString.toString().trim()
     }
 
     override fun onAttach(context: Context) {

@@ -35,6 +35,8 @@
 
     <string name="select_application">Select Application</string>
     <string name="permissions_not_granted">The required permission was not granted. Please check the permissions by opening the Settings app.</string>
+    <string name="send_subject">Body Temperature Record</string>
+    <string name="send_body_title">Send by Body Temperature Recorder</string>
 
     <string name="tab_temperature_list">Record</string>
     <string name="tab_graph">Graph</string>
