@@ -25,7 +25,7 @@ class DatePickerFragment(var year: Int, var month: Int, var day: Int): DialogFra
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return DatePickerDialog(context, this, year, month, day)
+        return DatePickerDialog(this.context as Context, this, year, month, day)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {

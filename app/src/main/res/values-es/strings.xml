@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">Registrador de temperatura corporal</string>
+
+    <string name="date">Fecha</string>
+
+    <string name="change">Cambio</string>
+    <string name="chg">CAM</string>
+
+    <string name="temperature">Temperatura corporal</string>
+
+    <string name="celsius">℃</string>
+    <string name="fahrenheit">°F</string>
+
+    <string name="condition">Síntomas</string>
+
+    <string name="clear">Claro</string>
+
+    <string name="memo">Nota</string>
+
+    <string name="delete">Eliminar</string>
+
+    <string name="save">Salvar</string>
+    <string name="edit">Editar</string>
+    <string name="add">Agregar</string>
+    <string name="send">Enviar</string>
+    <string name="select">Seleccione</string>
+
+    <string name="graphdays3">Gráfico de 3 días</string>
+    <string name="graphdays7">Gráfico de 7 días</string>
+    <string name="graphdays14">Gráfico de 14 días</string>
+    <string name="graphdays30">Gráfico de 30 días</string>
+
+    <string name="removeads"> Quitar anuncios </string>
+    <string name="privacy_policy">Política de privacidad</string>
+
+    <string name="select_application">Seleccionar aplicación</string>
+    <string name="permissions_not_granted">El permiso requerido no fue otorgado.\nVerifique los permisos abriendo la aplicación Configuración.</string>
+    <string name="send_subject">Registro de temperatura corporal</string>
+    <string name="send_body_title">Enviar por registrador de temperatura corporal</string>
+
+    <string name="tab_temperature_list">Grabar</string>
+    <string name="tab_graph">Grafico</string>
+    <string name="tab_person">Personas</string>
+    <string name="tab_config">Configuración</string>
+
+    <string name="title_temperature_list">Temperatura corporal</string>
+    <string name="title_graph">Grafico</string>
+    <string name="title_person">Personas</string>
+    <string name="title_config">Configuración</string>
+    <string name="title_input_temperature">Registro de la temperatura</string>
+    <string name="title_select_condition">Seleccionar síntoma</string>
+
+    <string name="nodata_comment1">Presione el botón [Agregar]</string>
+    <string name="nodata_comment2">Registre su registro de temperatura corporal</string>
+
+    <string name="display_in_Fahrenheit">Mostrar en Fahrenheit</string>
+
+    <string name="error_connect_failed">Error de conexión. Vuelve a intentarlo después de un tiempo.</string>
+    <string name="error_purchase_failed">Compra fallida. Por favor intente nuevamente después de un tiempo.</string>
+    <string name="message_remove_ads">Anuncio eliminado.</string>
+
+    <string name="message_no_input_temperature">Por favor, introduzca la temperatura corporal.</string>
+    <string name="message_invalid_temperature">Temperatura corporal no válida</string>
+
+    <string name="confirm_delete_temperature">Eliminar el registro. ¿Está bien?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="add_person">Agregar persona</string>
+    <string name="edit_name">Editar nombre</string>
+    <string name="error_delete_person">No se puede eliminar porque solo hay una persona.</string>
+    <string name="confirm">Confirmar</string>
+    <string name="confirm_delete_person">liminar la información de %s. ¿Está bien?</string>
+
+    <string name="condition0">Rinorrea</string>
+    <string name="condition1">Congestión nasal</string>
+    <string name="condition2">Tos</string>
+    <string name="condition3">Esputo</string>
+    <string name="condition4">Estornudo</string>
+    <string name="condition5">Dolor de garganta</string>
+    <string name="condition6">Dolor de cabeza</string>
+    <string name="condition7">Siente pesado</string>
+    <string name="condition8">Dolor corporal</string>
+    <string name="condition9">Siente escalofríos</string>
+    <string name="condition10">Dolor de estómago</string>
+    <string name="condition11">Diarrea</string>
+    <string name="condition12">Vómitos</string>
+    <string name="condition13">Siente náuseas</string>
+    <string name="condition14">Sin apetito</string>
+    <string name="condition15">Sibilancias</string>
+    <string name="condition16">Respiración dificultosa</string>
+
+</resources>

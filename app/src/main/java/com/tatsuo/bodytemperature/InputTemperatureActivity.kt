@@ -125,25 +125,22 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
     }
 
     private fun makeView() {
-        var dateFormatString = "E, MMM d"
-        var timeFormatString = "h:mm a"
-        if (Locale.getDefault().equals(Locale.JAPAN)) {
-            dateFormatString = "M'月'd'日('E')'"
-            timeFormatString = "H:mm"
-        }
-        val dateFormat = SimpleDateFormat(dateFormatString)
+        val dateFormat = SimpleDateFormat(getDateFormatStringMMDD())
         dateText.text = dateFormat.format(temperature.date)
 
-        val timeFormat = SimpleDateFormat(timeFormatString)
+        val timeFormat = SimpleDateFormat(getTimeFormatString())
         timeText.text = String.format("%5s",timeFormat.format(temperature.date))
 
         if(temperature.temperature != 0.0) {
-            // val temperatureText: EditText = findViewById((R.id.temperatureText))
+            var temperatureString = ""
             if(ConfigManager.loadUseFahrenheitFlag()){
-                temperatureText.setText(String.format("%.1f", temperature.getFahrenheitTemperature()))
+                temperatureString = String.format("%.1f", temperature.getFahrenheitTemperature())
+                // temperatureText.setText(String.format("%.1f", temperature.getFahrenheitTemperature()))
             } else {
-                temperatureText.setText(String.format("%.1f", temperature.temperature))
+                temperatureString = String.format("%.1f", temperature.temperature)
+                // temperatureText.setText(String.format("%.1f", temperature.temperature))
             }
+            temperatureText.setText(convertCommaToPeriod(temperatureString))
         }
 
         if(ConfigManager.loadUseFahrenheitFlag()){
@@ -218,7 +215,8 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
 
         var temperature : Double = 0.0
         try {
-            temperature = temperatureText.text.toString().toDouble()
+            val temperatureTextStr = convertCommaToPeriod(temperatureText.text.toString())
+            temperature = temperatureTextStr.toDouble()
         } catch (nfe : NumberFormatException){}
         if(temperature == 0.0){
             return getString(R.string.message_invalid_temperature)
@@ -228,7 +226,13 @@ class InputTemperatureActivity : AppCompatActivity(), TimePickerFragment.OnTimeS
     }
 
     private fun saveTemperature() {
-        val temperatureDouble : Double = temperatureText.text.toString().toDouble()
+        var temperatureDouble : Double = 0.0
+        try {
+            val temperatureTextStr = convertCommaToPeriod(temperatureText.text.toString())
+            temperatureDouble = temperatureTextStr.toDouble()
+        } catch (nfe : NumberFormatException){}
+
+        // val temperatureDouble : Double = temperatureText.text.toString().toDouble()
         // Log.e("***Temperature***","temperatureDouble -> "+temperatureDouble)
 
         if(ConfigManager.loadUseFahrenheitFlag()){

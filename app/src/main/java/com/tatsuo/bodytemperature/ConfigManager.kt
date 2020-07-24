@@ -1,6 +1,6 @@
 package com.tatsuo.bodytemperature
 
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 class ConfigManager {
 
@@ -64,7 +64,7 @@ class ConfigManager {
 
         fun loadTargetPersonName(): String {
             val preferences = PreferenceManager.getDefaultSharedPreferences(TemperatureApplication.instance)
-            return preferences.getString(KEY_TARGET_PERSON_NAME, "")
+            return preferences.getString(KEY_TARGET_PERSON_NAME, "")!!
         }
 
         fun saveTargetPersonName(targetPersonName: String) {

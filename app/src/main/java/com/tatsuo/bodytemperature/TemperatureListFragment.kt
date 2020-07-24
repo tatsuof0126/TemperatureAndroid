@@ -69,7 +69,7 @@ class TemperatureListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val personName = ConfigManager.loadTargetPersonName()
-        if(personName != "あなた" && personName != "You"){
+        if(personName != "あなた" && personName != "You" && personName != "Tú"){
             if (Locale.getDefault().equals(Locale.JAPAN)) {
                 requireActivity().setTitle(personName+"さん")
             } else {
@@ -109,7 +109,7 @@ class TemperatureListFragment : Fragment() {
                 // temperatureListView.adapter = TemperatureListViewAdapter(temperatureList, listener)
                 temperatureList.clear()
                 temperatureList.addAll(tempList)
-                Log.e("***Temperature***","temperatureList size : "+temperatureList.size)
+                // Log.e("***Temperature***","temperatureList size : "+temperatureList.size)
 
                 temperatureListView?.adapter?.notifyDataSetChanged()
                 if (temperatureList.size == 0) {
@@ -151,11 +151,7 @@ class TemperatureListFragment : Fragment() {
     private fun makeTemperatureString(temperature: Temperature) : String{
         val retString = StringBuilder()
 
-        var dateFormatString = "E, MMM d h:mm a"
-        if (Locale.getDefault().equals(Locale.JAPAN)) {
-            dateFormatString = "M'月'd'日('E')' H:mm"
-        }
-        val dateFormat = SimpleDateFormat(dateFormatString)
+        val dateFormat = SimpleDateFormat(getDateFormatString())
         retString.append(dateFormat.format(temperature.date))
         retString.append(" ")
 

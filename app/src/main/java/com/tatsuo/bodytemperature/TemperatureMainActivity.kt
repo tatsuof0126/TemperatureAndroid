@@ -18,18 +18,18 @@ import java.util.*
 import java.util.concurrent.Executors
 import kotlin.random.Random
 
+
 class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnListFragmentInteractionListener, GraphFragment.OnFragmentInteractionListener, PeopleFragment.OnFragmentInteractionListener, ConfigFragment.OnFragmentInteractionListener {
 
     private lateinit var mAdView: AdView
     private lateinit var mInterstitialAd: InterstitialAd
-    private val bannerAdRequest = AdRequest.Builder().addTestDevice("276EB5AF5B07A5B142631A70BEE353EE").addTestDevice("08F7DFA353E42A1A2C190B38622A90BD").build()
-    private val interstitialAdRequest = AdRequest.Builder().addTestDevice("276EB5AF5B07A5B142631A70BEE353EE").addTestDevice("08F7DFA353E42A1A2C190B38622A90BD").build()
-    private val INTERSTITIAL_RATE = 35
+    private val bannerAdRequest = AdRequest.Builder().build()
+    private val interstitialAdRequest = AdRequest.Builder().build()
 
     // HUAWEI：276EB5AF5B07A5B142631A70BEE353EE、ASUS：08F7DFA353E42A1A2C190B38622A90BD
-    // val bannerAdRequest = AdRequest.Builder().build()
-    // val interstitialAdRequest = AdRequest.Builder()..build()
-
+    private val testDevices = listOf<String>("276EB5AF5B07A5B142631A70BEE353EE","08F7DFA353E42A1A2C190B38622A90BD")
+    private val INTERSTITIAL_RATE = 35
+    
     var targetDate: Date = Date()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -81,6 +81,10 @@ class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnL
                 useFahrenheitFlag = true
             }
 
+            if (Locale.getDefault().language == "es") {
+                personName = "Tú"
+            }
+
             ConfigManager.saveTargetPersonId(personId)
             ConfigManager.saveTargetPersonName(personName)
             ConfigManager.saveUseFahrenheitFlag(useFahrenheitFlag)
@@ -104,8 +108,12 @@ class TemperatureMainActivity : AppCompatActivity(), TemperatureListFragment.OnL
         if (ConfigManager.loadShowAdsFlag()) {
             // アプリID（本番）：ca-app-pub-6719193336347757~4001892480
             // アプリID（テスト）: ca-app-pub-3940256099942544~3347511713
-            MobileAds.initialize(this, "ca-app-pub-6719193336347757~4001892480")
+            MobileAds.initialize(this)
+            // MobileAds.initialize(this, "ca-app-pub-6719193336347757~4001892480")
             MobileAds.setAppVolume(0.1f);
+
+            val requestConfiguration = RequestConfiguration.Builder().setTestDeviceIds(testDevices).build()
+            MobileAds.setRequestConfiguration(requestConfiguration)
 
             mAdView = findViewById(R.id.adView)
 
